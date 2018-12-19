@@ -93,9 +93,10 @@ biebake  help
 ## 06 将第二步创建的层（meta-custom）改造成自己的机器
 ![](image_yocto/2.png)
 
-```sh
-    cat mycmi751.conf
-```
+<div>
+cat  mycmi751.conf
+</div>
+
 ![](image_yocto/3.png)
 
 ```sh
@@ -106,9 +107,10 @@ mv am335x-evm.conf mycmi752.conf
 然后对mycmi752.conf文件进行修改
 ```
 
-```sh
-    cat linux-751.bb
-```
+<div>
+cat  linux-751.bb
+</div>
+
 ![](image_yocto/4.png)
 
 ## 07 关于板级文件的创建
@@ -128,6 +130,7 @@ mv am335x-evm.conf mycmi752.conf
 需要注意的一点如下图：
 将自己的板级名字添加到ti的文件系统库中：
 </div>
+
 ![](image_yocto/6.png)
 
 ## 09 给自己的BSP添加自己的uboot
