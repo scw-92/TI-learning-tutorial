@@ -8,6 +8,9 @@
 * 操作系统：Ubuntu 14.04
 
 ```sh
+  buildroot的sysroot目录：output/host/usr/arm-buildroot-linux-gnueabihf/sysroot
+```
+```sh
   1. 如果交叉编译工具链是32位，需要下载32位的依赖库
     sudo apt-get install   libc6:i386   libstdc++6:i386   libncurses5:i386 zlib1g:i386
 
@@ -109,7 +112,8 @@
 
 ![git](imagebuildroot/图片9.png)
 
-* 2.3 编译自己的内核
+* 2.3.1 编译自己的内核
+[参考链接](https://blog.csdn.net/xj178926426/article/details/53118589)
 
 ![git](imagebuildroot/图片10.png)
 
@@ -117,14 +121,66 @@
 注意上图有错误：
 (am335x-cmi_at751) Device Tree Source file names （不要带后缀名 .dts）
 ```
-* 2.5编译3Dqt
+```#!/bin/sh
+  配置内核
+    等用buildroot下载内核源码之后，我们可以使用如下命令来配置内核：
+  make linux-menuconfig
+```
+
+* 2.3.2 编译自己的驱动模块
+[参考链接](https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules)
+
+```#!/bin/sh
+01: ################################################################################
+02: #
+03: # foo
+04: #
+05: ################################################################################
+06:
+07: FOO_VERSION = 1.2.3
+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
+09: FOO_SITE = http://www.foosoftware.org/download
+10: FOO_LICENSE = GPL-2.0
+11: FOO_LICENSE_FILES = COPYING
+12:
+13: $(eval $(kernel-module)) #对比普通的软件包来说，内核驱动软件包多了此步
+14: $(eval $(generic-package))
+
+#对比普通的软件包来说，内核驱动软件包多了一步：$(eval $(kernel-module))
+```
+
+* 2.4编译3Dqt [参考文档](http://vanguardiasur.com.ar/opengl-es-on-beaglebone-black/)
 
 ```sh
+  补丁文件：http://patchwork.ozlabs.org/patch/939704/ ，此补丁文件仅做参考使用，不具有实际价值。
   使用buildroot编译QT需要三步
   1. 选择内核
-  2. 选择ti-sgx-km（BR2_PACKAGE_TI_SGX_KM）
+  2.选择sgx驱动与egl库
+    ti-sgx-km（BR2_PACKAGE_TI_SGX_KM） ：sgx硬件驱动
+    ti-sgx-um（BR2_PACKAGE_TI_SGX_UM） ：提供egl等3D渲染需要的库
   3. 选择QT
+
+  注意：不要选择ti-gfx：ti-gfx是老版本内核所用的提供sgx驱动与egl库，新版本不能用
 ```
+
+* 2.4.1 修改ti-sgx-km.mk
+
+  ```#!/bin/sh
+    buildroot中默认的ti-sgx-km版本是sdk2.0版本，我们需要根据自己的SDK版本进行修改
+    1. 下载ti-sgx-km源码
+      git clone git://git.ti.com/graphics/omap5-sgx-ddk-linux.git
+    2. 切换到合适的版本
+      git branch -a
+      git checkout ti-img-sgx/1.14.3699939/k4.4
+      git log 将当前最新的commit编号拷贝到ti-sgx-km.mk文件中替换掉原先的commit编号。
+      make ti-sgx-km 进行编译
+  ```
+  * 2.4.2 修改ti-sgx-um.mk
+```#!/bin/sh
+  git clone
+  仿照2.4.1 去修改ti-sgx-um.mk
+```
+
 * 2.5 编译自己的uboot
   * pass
 * 2.6 添加githup软件包
@@ -135,5 +191,5 @@
   ![git](imagebuildroot/图片7.png)
 
   * 第二种方式
-  
+
   ![git](imagebuildroot/图片8.png)

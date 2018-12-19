@@ -10,6 +10,8 @@
 * [08 alsa-utils](#jump8)
 * [09 补丁制作](#jump9)
 * [10 开发工具收集](#jump10)
+* [11 显示用户名信息](#jump11)
+# [12 搭建开发环境变量](#jump12)
 
 ## <span id="jump1">01 opensshd服务的配置
 ![](image_filetools/图片1.png)
@@ -22,6 +24,11 @@
   PermitRootLogin yes
   PasswordAuthentication yes
 ```
+* 使用ssh登录远程机器
+```sh
+  ssh -l   ARiio_5100 192.168.4.183
+```
+
 ## <span id="jump2">02 vsftpd服务的配置与使用
 ![](image_filetools/图片2.png)
 
@@ -489,5 +496,17 @@ Xshell：https://pan.baidu.com/s/1zaX2iSRhkrCtBgZWbt8ndw pr6d
 远程登录FileZilla：https://pan.baidu.com/s/133TLkyOLHo9ZyJOiWh3LHw n7z3
 UE中文版编辑器：https://pan.baidu.com/s/1OiE59Ha_RTfWUHKf4pqmfw tvp7
 寄存器位查看小工具：https://pan.baidu.com/s/1zpFxDRL7sNQskY1L9c1rnw 8nhx
+```
+## <span id="jump11">11 显示用户名信息
+```sh
+  在 /etc/profile文件末尾添加如下内容
+  export PS1='\u@\h:\w # '
+```
+## <span id="jump12">12 搭建开发环境变量
+```sh
+在 ~/.bashrc文件末尾添加如下内容：
+export PATH+=:/home/cmi-at751/cmi_at751/gcc_arm/gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf/bin
+export CROSS_COMPILE=arm-linux-gnueabihf-
+export ARCH=arm
 
 ```

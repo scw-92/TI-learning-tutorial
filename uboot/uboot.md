@@ -232,4 +232,5 @@ patch -p1 < u-boot-2018_cmiat751.parth
 ```#!/bin/sh
   1. githup:git://git.ti.com/ti-u-boot/ti-u-boot.git
   2. sdk:http://www.ti.com/tool/processor-sdk-am335x
+  3. 下载指定的版本：http://software-dl.ti.com/processor-sdk-linux/esd/AM335X/03_03_00_04/index_FDS.html
 ```
