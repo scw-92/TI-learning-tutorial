@@ -137,9 +137,11 @@ mv am335x-evm.conf mycmi752.conf
 <div>
 cat  meta-custom/conf/machine/mycmi752.conf
 </div>
+
 ![](image_yocto/7.png)
 
 <div>
 cat  meta-custom/recipes-bsp/u-boot/u-boot-mycmi752_2016.05.bb
 </div>
+
 ![](image_yocto/8.png)
