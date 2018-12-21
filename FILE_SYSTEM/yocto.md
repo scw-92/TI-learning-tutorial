@@ -7,6 +7,9 @@
 uboot源码：/home/am335x/ti_yocto/tisdk/build/arago-tmp-external-linaro-toolchain/work/mycmi751-linux-gnueabi/u-boot-ti-staging/2016.05+gitAUTOINC+b4e185a8c3-r5.tisdk0/git
 <br/>镜像位置：/home/am335x/ti_yocto/tisdk/build/arago-tmp-external-linaro-toolchain/deploy/images
 </div>
+```sh
+  TI 软件源代码下载： ti软件源：http://software-dl.ti.com/processor-sdk-mirror/sources
+```
 
 * yocto配置文件结构
 
@@ -93,10 +96,9 @@ biebake  help
 ## 06 将第二步创建的层（meta-custom）改造成自己的机器
 ![](image_yocto/2.png)
 
-<div>
-cat  mycmi751.conf
-</div>
-
+```sh
+    cat mycmi751.conf
+```
 ![](image_yocto/3.png)
 
 ```sh
@@ -107,10 +109,9 @@ mv am335x-evm.conf mycmi752.conf
 然后对mycmi752.conf文件进行修改
 ```
 
-<div>
-cat  linux-751.bb
-</div>
-
+```sh
+    cat linux-751.bb
+```
 ![](image_yocto/4.png)
 
 ## 07 关于板级文件的创建
@@ -130,7 +131,6 @@ cat  linux-751.bb
 需要注意的一点如下图：
 将自己的板级名字添加到ti的文件系统库中：
 </div>
-
 ![](image_yocto/6.png)
 
 ## 09 给自己的BSP添加自己的uboot
@@ -148,3 +148,27 @@ cat  meta-custom/recipes-bsp/u-boot/u-boot-mycmi752_2016.05.bb
 </div>
 
 ![](image_yocto/8.png)
+
+## 10 更新yocto的软件源地址
+* [ti软件源](http://software-dl.ti.com/processor-sdk-mirror/sources)
+
+```sh
+  yocto中有些软件的地址已经失效，需要更新的软件下载地址
+  以下载binutils-linaro-2.25.0-2015.01-2.tar.xz软件包为例：
+
+  ERROR: binutils-native-linaro-2.25-r2015.01 do_fetch: Function failed: Fetcher failure for URL: 'http://releases.linaro.org/15.01/components/toolchain/binutils-linaro/binutils-linaro-2.25.0-2015.01-2.tar.xz'. Unable to fetch URL from any source.
+
+  ERROR: Task 695 (virtual:native:/home/ARiio_5100/tisdk/sources/meta-linaro/meta-linaro-toolchain/recipes-devtools/binutils/binutils_linaro-2.25.bb, do_fetch) failed with exit code '1'
+```
+<div>
+  从以上的错误信息可以知道，对于binutils_linaro-2.25.bb配方文件来说，其do_fetch函数过去不了软件包，这时我们需要在binutils_linaro的配置文件中更改http地址
+</div>
+```sh
+  cd /home/ARiio_5100/tisdk/sources/meta-linaro/meta-linaro-toolchain/recipes-devtools/binutils/
+  ARiio_5100@am335x:~/tisdk/sources/meta-linaro/meta-linaro-toolchain/recipes-devtools/binutils$ ls
+    binutils-cross-canadian_linaro-2.25.bb  binutils-linaro-2.25
+    binutils-cross_linaro-2.25.bb           binutils_linaro-2.25.bb
+    binutils-crosssdk_linaro-2.25.bb        binutils-linaro-2.25.inc
+
+  由于binutils_linaro-2.25.bb文件中没有地址的配置，而我们在binutils-linaro-2.25.inc中找到了地址的配置，所以我们需要在binutils-linaro-2.25.inc文件中更改地址。
+```

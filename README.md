@@ -15,7 +15,7 @@
 * [参考链接](FILE_SYSTEM/FILE_SYSTEM.md)
 
 ## 04 移植uboot
-* [参考链接](uboot/uboot_over.md)
+* [参考链接](uboot/uboot.md)
 
 ## 05 移植kernel
 * [参考链接](kernel/kernel.md)

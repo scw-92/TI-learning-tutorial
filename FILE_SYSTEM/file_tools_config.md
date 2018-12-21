@@ -11,7 +11,8 @@
 * [09 补丁制作](#jump9)
 * [10 开发工具收集](#jump10)
 * [11 显示用户名信息](#jump11)
-# [12 搭建开发环境变量](#jump12)
+* [12 搭建开发环境变量](#jump12)
+* [13 apache2的配置与使用](#jump13)
 
 ## <span id="jump1">01 opensshd服务的配置
 ![](image_filetools/图片1.png)
@@ -510,3 +511,50 @@ export CROSS_COMPILE=arm-linux-gnueabihf-
 export ARCH=arm
 
 ```
+
+## <span id="jump13">13 apache2的配置与使用
+* 01 apache2的移植
+<div>移植apache</div>
+![](image_filetools/11.png)
+
+* 02 重新移植PHP
+<div>重新配置PHP支持apache接口
+</div>
+![](image_filetools/12.png)
+
+
+* 03 apache的使用
+
+  ```sh
+    启动：apachectl start
+    重启：apachectl restart
+    停止：apachectl stop
+  ```
+
+* 04 apache的配置
+ ```sh
+    cat  /etc/apache2/httpd.conf
+    1. ServerRoot "/usr" 指定apache软件的根目录:其他插件的加载都是相对于此路径来说的，比如LoadModule php7_module        modules/libphp7.so，其中libphp7.so的绝对路径是 /usr/modules/libphp7.so
+    2.1 DocumentRoot "/usr/htdocs" :指定文档的根目录
+    2.2 <IfModule dir_module>
+        DirectoryIndex index.html index.php # 指定默认的访问页面
+        </IfModule>
+    3. <Directory "/usr/htdocs">  对/usr/htdocs目录的操作权限进行设置
+      </Directory>
+    4. ServerName localhost:80：指定服务器的ip,port
+    5. 配置模块以 php模块为例
+    <IfModule php7_module>
+    AddHandler php7-script .php .html  #当浏览器访问以此后缀（.php .html）文件结尾的包含PHP内容的文件时，调用PHP处理器。（此句表明php支持的脚本的文件格式）
+    AddType text/html .php  
+    # DirectoryIndex index.php
+    </IfModule>
+ ```
+* 05 运行验证
+
+```sh
+    cat index.phh 或者 index.html
+    <?php
+        phpinfo();
+    ?>
+```
+![](image_filetools/13.png)
