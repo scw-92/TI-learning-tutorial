@@ -515,11 +515,13 @@ export ARCH=arm
 ## <span id="jump13">13 apache2的配置与使用
 * 01 apache2的移植
 <div>移植apache</div>
+
 ![](image_filetools/11.png)
 
 * 02 重新移植PHP
 <div>重新配置PHP支持apache接口
 </div>
+
 ![](image_filetools/12.png)
 
 
