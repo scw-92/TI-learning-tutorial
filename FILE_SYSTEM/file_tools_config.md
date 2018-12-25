@@ -652,3 +652,117 @@ exit 0
     AddType application/x-httpd-php-source .phps
   </IfModule>
 ```
+
+* 9.2.4 启动apache
+```sh
+  apachectl start
+```
+
+*  10 apache的权限问题
+  * [参考地址1](https://www.cnblogs.com/hf8051/p/4511155.html)
+  * [参考地址2](https://www.jianshu.com/p/d8012cb2780d)
+  * [编译具有root启动权限的apache](https://blog.csdn.net/wentinghe/article/details/41449433?utm_source=blogxgwz0)
+
+```sh
+    不以root身份运行，有效root用户的程序无法执行
+```
+
+* 10.1 查看Web服务器的属主
+<div>cat inex.php</div>
+```sh
+  <?php
+		 //phpinfo();
+		 $ret = exec("whoami",$ret,$status);
+		 if ($status == 0){
+		 		echo $ret;
+		 		echo "----1" ;
+		 }else{
+		 		echo "error";
+		 }
+?>
+```
+
+```#!/bin/sh
+  对于上面的代码，我们使用不同的Web服务器软件时，其属主是不同的：
+  1. lighttpd -----> root
+  2. apache2 ------> 非root用户
+
+  总结：对于属主是root的APP,则apache2是没有权限调用的，所以调用会失败。
+```
+
+* 10.2  修改2apache源代码，支持root启动
+<div>01 以root启动的报错信息</div>
+
+```#!/bin/sh
+[rootAplex lib]# apachectl restart
+AH00526: Syntax error on line 179 of /etc/apache2/httpd.conf:
+Error:\tApache has not been designed to serve pages while\n\trunning as root.  There are known race conditions that\n\twill allow any local user to read any file on the system.\n\tIf you still desire to serve pages as root then\n\tadd -DBIG_SECURITY_HOLE to the CFLAGS env variable\n\tand then rebuild the server.\n\tIt is strongly suggested that you instead modify the User\n\tdirective in your httpd.conf file to list a non-root\n\tuser.\n
+[rootAplex lib]#
+```
+<div>02 根据上述报错信息，在apache的源代码目录中搜索如下关键字</div>
+
+```#!/bin/sh
+  cd buildroot-2017.02.8/output/build/apache-2.4.27
+  grep "DBIG_SECURITY_HOLE" -nr
+```
+<div>03 修改-重新编译</div>
+
+```#!/bin/sh
+  rm .stamp_target_installed
+  rm .stamp_staging_installed
+  rm .stamp_build
+  cd buildroot-2017.02.8/output/build/apache-2.4.27
+  grep "DBIG_SECURITY_HOLE" -nr
+    modules/arch/unix/mod_unixd.c:224:                "\tadd DBIG_SECURITY_HOLE to the CFLAGS env variable\n"
+
+
+```
+
+```#!/bin/sh
+vi modules/arch/unix/mod_unixd.c
+
+#if 0
+218 #if !defined (BIG_SECURITY_HOLE) && !defined (OS2)
+219     if (ap_unixd_config.user_id == 0) {
+220         return "Error:\tApache has not been designed to serve pages while\n"
+221                 "\trunning as root.  There are known race conditions that\n"
+222                 "\twill allow any local user to read any file on the system.    \n"
+223                 "\tIf you still desire to serve pages as root then\n"
+224                 "\tadd -DBIG_SECURITY_HOLE to the CFLAGS env variable\n"
+225                 "\tand then rebuild the server.\n"
+226                 "\tIt is strongly suggested that you instead modify the User    \n"
+227                 "\tdirective in your httpd.conf file to list a non-root\n"
+228                 "\tuser.\n";
+229     }
+230 #endif
+231 #endif
+
+
+修改完之后：
+cd buildroot-2017.02.8
+make apache
+```
+
+<div>04 以root身份启动Apache</div>
+
+```#!/bin/sh
+    vi /etc/apache2/httpd.conf
+    <IfModule unixd_module>
+    #
+    # If you wish httpd to run as a different user or group, you must run
+    # httpd as root initially and it will switch.
+    #
+    # User/Group: The name (or #number) of the user/group to run httpd as.
+    # It is usually good practice to create a dedicated user and group for
+    # running httpd, as with most system services.
+    #
+    User root    # 以root身份启动
+    Group root   # 以root身份启动
+
+    </IfModule>
+```
+<div>05 启动Apache</div>
+
+```#!/bin/sh
+    apachectl start
+```
