@@ -513,15 +513,18 @@ export ARCH=arm
 ```
 
 ## <span id="jump13">13 apache2的配置与使用
+* 00 版本
+```sh
+  apache : 2.4
+  php : 7.1.7
+```
 * 01 apache2的移植
 <div>移植apache</div>
-
 ![](image_filetools/11.png)
 
 * 02 重新移植PHP
 <div>重新配置PHP支持apache接口
 </div>
-
 ![](image_filetools/12.png)
 
 
@@ -533,7 +536,7 @@ export ARCH=arm
     停止：apachectl stop
   ```
 
-* 04 apache的配置
+* 04 apache的配置(php以模块的方式加载)
  ```sh
     cat  /etc/apache2/httpd.conf
     1. ServerRoot "/usr" 指定apache软件的根目录:其他插件的加载都是相对于此路径来说的，比如LoadModule php7_module        modules/libphp7.so，其中libphp7.so的绝对路径是 /usr/modules/libphp7.so
@@ -560,3 +563,92 @@ export ARCH=arm
     ?>
 ```
 ![](image_filetools/13.png)
+
+* 06 启动脚本
+
+```sh
+cat /etc/init.d/S71apache2
+
+#! /bin/sh
+
+set -e
+
+DESC="apachectl"
+NAME=apachectl
+DAEMON=/usr/bin/$NAME
+
+case "$1" in
+start)
+    printf "Starting $DESC: "
+    start-stop-daemon -S -b -x $NAME --
+    echo "OK"
+    ;;
+stop)
+    printf "Stopping $DESC: "
+    apachectl stop
+    echo "OK"
+    ;;
+restart|force-reload)
+    echo "Restarting $DESC: "
+    apachectl restart
+    echo "OK"
+    ;;
+*)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+```
+
+* 09 配置apache\PHP fcgi方式
+
+* 9.1 cat /etc/php-fpm.conf
+
+```sh
+    [www]
+    pm = ondemand
+    pm.process_idle_timeout = 120s
+    pm.max_children = 5
+
+    listen = 127.0.0.1:9000
+    listen.owner = www-data
+    listen.group = www-data
+    user = www-data
+    group = www-data
+
+```
+
+* 9.2 配置etc/apache2/httpd.conf
+
+* 9.2.1 使能fcgi模块
+```sh
+    LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
+    LoadModule proxy_module modules/mod_proxy.so
+```
+
+* 9.2.2 在httpd.conf文件末尾添加虚拟主机
+```sh
+    <VirtualHost *:80>
+      ServerName www.sssever.com
+      DocumentRoot /usr/share/web/lighttpd/webpages
+      ProxyRequests Off
+      ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:9000/usr/share/web/lighttpd/webpages/$1
+      <Directory /usr/share/web/lighttpd/webpages>
+         Options FollowSymlinks
+         DirectoryIndex index.php
+         AllowOverride All
+         Require all granted
+      </Directory>
+    </VirtualHost>
+```
+
+* 9.2.3 在httpd.conf文件中添加如下两句
+```sh
+  <IfModule mime_module>
+    ...........
+    AddType application/x-httpd-php .php
+    AddType application/x-httpd-php-source .phps
+  </IfModule>
+```

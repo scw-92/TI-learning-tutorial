@@ -1,4 +1,5 @@
 # TI 控制器驱动列表
+* [02 ddr](02-ddr/ddr.md)
 * [04 real_time](04-real_time/)
 * [05 SGX](05-SGX/sgx.md)
 * [06 intc](06-INTC/06intc.md)
