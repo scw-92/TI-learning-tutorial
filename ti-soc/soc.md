@@ -1,4 +1,5 @@
 # TI 控制器驱动列表
+* [驱动指南](http://processors.wiki.ti.com/index.php/Category:AM335x?keyMatch=am335x&tisearch=Search-EN)
 * [02 ddr](02-ddr/ddr.md)
 * [04 real_time](04-real_time/)
 * [05 SGX](05-SGX/sgx.md)
