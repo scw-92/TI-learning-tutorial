@@ -1,2 +1,2 @@
-[kernel](kernel/lcd.md)
-[kernel](uboot/lvds.md)
+* [kernel](kernel/lcd.md)
+* [uboot](uboot/lvds.md)

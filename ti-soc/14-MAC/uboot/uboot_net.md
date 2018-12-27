@@ -57,6 +57,7 @@
 ![](image_ubootnet/9.png)
 
 ## 06 选择默认的PHY
+<div>下面的图片有错误，选取编号是0的PHY作为默认的PHY，这个编号是 cpsw_slaves[]的下标。</div>
 ![](image_ubootnet/10.png)
 
 ## 07 开启此PHY的驱动代码权限
