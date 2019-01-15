@@ -141,7 +141,11 @@ phpinfo();
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在设置完上述内容后，重启开发板，使配置生效，在串口终端输入命令 telnetd（/usr/sbin/telnetd）启动服务，然后在客户端使用 telnet ip （例如：telnet 192.168.4.250）登录服务器,在登录窗口中输入 root + 密码。
 ## <span id="jump5">05 x11与fluxbox编译
+* [参考](https://www.cnblogs.com/AdiSky/p/4990582.html)
+
 ![](image_filetools/图片10.png)
+
+
 * 1. 详细功能选项（本文中没有明文列出的，表示可以选择默认选项）
 
 ```sh

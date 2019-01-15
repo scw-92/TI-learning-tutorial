@@ -12,6 +12,12 @@ CONFIG_DRM=y/m
 CONFIG_DRM_I2C_NXP_TDA998X=y/m
 CONFIG_DRM_TILCDC=y/m
 CONFIG_DRM_OMAP=y/m
+
+设备树配置：
+sgx {
+    status = "okay";
+};
+
 ```
 
 * 03 给uboot打补丁

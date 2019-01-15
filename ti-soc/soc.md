@@ -15,6 +15,8 @@
 * [18 mmc](18-mmc/EMMC.md)
 * [19 timers](19-timers/timers.md)
 * [21 i2c](21-i2c/i2c.md)
+* [22 mcasp](22-mcasp/mcasp.md)
 * [23 can](23-can/can.md)
 * [25 gpio](25-gpio/gpio.md)
 * [26 boot](26-boot/boot.md)
+* [am335x-开发流程（参数配置）](http://note.youdao.com/noteshare?id=0da5f6a77028af032fc3540ef6de3519)
