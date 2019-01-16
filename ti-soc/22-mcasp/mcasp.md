@@ -3,6 +3,8 @@
   Multichannel Audio Serial Port (McASP):
   <br>
   McASP是美国TI公司的DSP的一种接入接口。称为复通道音频接入接口。这是一种通用的音频接入接口(是CPU与声卡芯片进行音频数据交互的通道接口)。采用的是时分复用的数据流形式。
+  <br>
+  mcasp是soc与声卡进行数据交互的一种接口模块，声卡是对音频数据处理的芯片（比如控制声音的大小等功能
 </p>
 
 
@@ -17,14 +19,22 @@
 
 ## 01 参考文件
 * [MCASP百度百科](https://baike.baidu.com/item/MCASP/1669886?fr=aladdin)
+* [PCM简介](https://blog.csdn.net/qingkongyeyue/article/category/7258049)
 * [网上am335x声卡配置（设备树版）全套流程](http://www.eeworld.com.cn/mcu/2015/0819/article_21774.html)
 * [TI 声卡驱动配置指南](http://software-dl.ti.com/processor-sdk-linux/esd/docs/latest/linux/Foundational_Components_Kernel_Drivers.html#audio)
 * [TI 声卡使用参考文档](http://processors.wiki.ti.com/index.php/AM335x_Audio_Driver%27s_Guide)
+* [音频子系统框架](https://blog.csdn.net/sanmaoljh/article/category/6387692)
 
 ## 02 名词简称
 * Multichannel Audio Serial Port (McASP)
 * [time-division multiplexed (TDM)](https://baike.baidu.com/item/%E6%97%B6%E5%88%86%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/7831037?fr=aladdin)：划分时间片，不同的时间片传出不同的数据，宏观上看起来就是时间复用的感觉
 * Pulse Code Modulation (PCM) ：脉冲编码调制
+
+## 02.1 技术介绍
+*  TDM/IIS ：音频数据传输技术
+*  DAC    ： 数字量转化为模拟量（播放功能）
+* ADC     ：模拟量转换为数字量（录音-数据采集）
+* PCM     ： 将数字量进行编码形成脉冲或者将脉冲进行解码形成数字量
 
 ## 03 声卡数据处理流程
 * [参考地址](http://blog.sina.com.cn/s/blog_7e4797d70102whoa.html)
@@ -36,6 +46,11 @@
 <div>硬件流程</div>
 
 ![](mcasp_image/clipboard2.png)
+
+<div>2410流程</div>
+
+![](mcasp_image/clipboard9.png)
+
 
 ## 04 mcasp的管脚功能介绍
 
@@ -174,3 +189,6 @@ Documentation/devicetree/bindings/sound/davinci-mcasp-audio.txt
 录音测试：
   arecord -f cd test.wav  
 ```
+
+## 12 声卡驱动架构
+* [驱动架构](alsa.md)

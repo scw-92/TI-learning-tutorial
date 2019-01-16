@@ -21,6 +21,18 @@ sync
 sudo apt-get install gperf bison ruby flex
 ```
 
+* 指定交叉编译工具链
+
+```sh
+  因为编译QT5.6.2需要用到TI-sdk里面的交叉编译工具链，所以我们需要把交叉编译工具链的环境路径变量修改为TI-sdk里面的路径，然后在make编译QT5.6.2
+
+  具体操作如下：
+  cd ~
+  cat .bashrc
+    export PATH+=:/home/cmi-at751/cmi_at751/TI-SDK/.../交叉编译工具链的路径
+
+```
+
 ## 二、 QT5.6.2 交叉编译前的配置
 * 进入 QT5.6.2 源代码目录，删除 qtwebengine 模块代码目录
 ```sh
@@ -114,6 +126,7 @@ sync
 “-device” 后面跟的是QT的配置文件
 “-prefix” 后面跟的是QT的安装目录   
 根据自己创建的目录合理更改上述选项
+生成的文件会放在  sysroot 下面的/home/am335x/qt5里面
 ```
 
 * 编译
@@ -314,7 +327,7 @@ Qt Version，点击add在version name输入名字(随便写一个)，在 qmake l
 ```
 
 ![qmake](img/qt5/6/6.3.png)
-    
+
 ```sh
 图 6.3所示，在此页面指定项目名称和项目所在路径。
 ```
